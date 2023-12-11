@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- SEO Change: Added a descriptive title -->
+    <title>Personal Budget - Manage Your Finances</title>
+    <!-- SEO Change: Added a meta description -->
+    <meta name="description" content="A free personal budget management app for better financial planning.">
+    <!-- SEO Change: Added meta keywords -->
+    <meta name="keywords" content="budget, finance, personal finance, money management">
+    
+    <!-- Include your CSS files -->
+    <link rel="stylesheet" type="text/css" href="/styles/reset.css">
+    <link rel="stylesheet" type="text/css" href="/styles/main.css">
+    
+</head>
+<body>
+
+
+    <!-- Content for login information -->
+<div id="login-info" style="display: none;"></div>
+
+<!-- Semantic HTML Change: Added a skip link for accessibility -->
+<a href="#main" class="skip">Skip to content</a>
+
+<!-- Semantic HTML Change: Changed <header> to <nav> for navigation -->
+<nav>
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/about.html">About</a></li>
+     <!-- Change the link to a button -->
+     <li><button onclick="showLogin()">Login</button></li>
+
+        <!-- Semantic HTML Change: Added rel="external" for an external link -->
+        <li><a href="https://google.com" rel="external">Google</a></li>
+    </ul>
+</nav>
+
+<!-- Semantic HTML Change: Changed <header> to <main> for main content -->
+<main id="main">
+    <!-- Semantic HTML Change: Changed <div> to <section> for better structure -->
+    <section class="hero">
+        <h1>Welcome to Personal Budget</h1>
+        <h2>Your Trusted Personal Finance App</h2>
+        <!-- A11y Change: Added alt attribute to hero image for screen readers -->
+        <img src="bg.png" alt="Image describing the Personal Budget app" />
+    </section>
+
+    <!-- Semantic HTML Change: Changed <div> to <section> for better structure -->
+    <section class="page-content">
+        <article>
+            <h1>Track Your Expenses</h1>
+            <p>
+                Discover where your money goes with our expense tracking feature. It's crucial for better financial planning.
+            </p>
+        </article>
+
+        <article>
+            <h1>Set Budget Alerts</h1>
+            <p>
+                Stay on top of your finances by setting budget alerts. Never exceed your spending limits again.
+            </p>
+        </article>
+
+        <article>
+            <h1>Financial Freedom</h1>
+            <p>
+                Achieve financial freedom and happiness by managing your expenses with confidence.
+            </p>
+        </article>
+
+        <article>
+            <h1>Free</h1>
+            <p>
+                This app is free!!! And you are the only one holding your data!
+            </p>
+        </article>
+
+        <article>
+            <h1>Stay on track</h1>
+            <p>
+                Do you know where you are spending your money? If you really stop to track it down,
+                you would get surprised! Proper budget management depends on real data... and this
+                app will help you with that!
+            </p>
+        </article>
+
+        <article>
+            <h1>Alerts</h1>
+            <p>
+                What if your clothing budget ended? You will get an alert. The goal is to never go over the budget.
+            </p>
+        </article>
+
+        <article>
+            <h1>Results</h1>
+            <p>
+                People who stick to a financial plan, budgeting every expense, get out of debt faster!
+                Also, they to live happier lives... since they expend without guilt or fear... 
+                because they know it is all good and accounted for.
+            </p>
+        </article>
+
+    </section>
+
+     
+
+    <!-- Semantic HTML Change: Changed <div> to <section> for better structure -->
+    <section class="chart-section">
+       
+        
+        <article>
+            <h1>Chart</h1>
+            <!-- Removed the duplicate canvas with the same id 'myChart' -->
+            <canvas id="myChart" width="400" height="400"></canvas>
+        </article>
+        <!-- D3.js chart container for the bar chart -->
+        <div id="d3-bar-chart" style="width: 400px; height: 400px;"></div>
+    </section>
+
+ <!-- Add the login form with an initial display set to "none" -->
+<section class="login-section" id="login-form" style="display: none;">
+    <h1>Login</h1>
+    <form>
+        <label for="login-username">Username:</label>
+        <input type="text" id="login-username" name="login-username" required>
+  
+        <label for="login-password">Password:</label>
+        <input type="password" id="login-password" name="login-password" required>
+  
+        <button type="button" onclick="loginUser()">Login</button>
+    </form>
+</section>
+
+  
+</main>
+
+<!-- Semantic HTML Change: Changed <div> to <section> for better structure -->
+    <section class="chart-section">
+        <!-- Chart 1: Pie Chart -->
+        <article>
+            <h1>Expense Distribution</h1>
+            <canvas id="myPieChart" width="400" height="400"></canvas>
+        </article>
+    
+        <!-- Chart 2: Bar Chart -->
+        <article>
+            <h1>Monthly Budget Breakdown</h1>
+            <div id="d3-bar-chart" style="width: 400px; height: 400px;"></div>
+        </article>
+    
+        <!-- Chart 3: Line Chart -->
+        <article>
+            <h1>Monthly Spending Trends</h1>
+            <canvas id="myLineChart" width="400" height="400"></canvas>
+        </article>
+    </section>
+
+
+
+
+<!-- Include your JavaScript libraries and scripts here -->
+
+<!-- Include Axios and Chart.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+
+<!-- Include D3.js -->
+<script src="https://d3js.org/d3.v7.min.js"></script>
+
+<!-- Your JavaScript code for Chart.js and D3.js -->
+<script>
+    // ... Your existing code for Chart.js
+// Chart.js code for the first chart
+var dataSource = {
+        datasets: [
+            {
+                data: [],
+                backgroundColor: [
+                    '#ffcd56',
+                    '#ff6384',
+                    '#36a2eb',
+                    '#fd6b19',
+                ]
+            }
+        ],
+        labels: []
+    };
+
+    function createChart() {
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myPieChart = new Chart(ctx, {
+            type: 'pie',
+            data: dataSource
+        });
+    }
+
+// Chart.js code for the pie chart
+function createPieChart() {
+    var ctx = document.getElementById('myPieChart').getContext('2d');
+    var myPieChart = new Chart(ctx, {
+        type: 'pie',
+        data: dataSource
+    });
+}
+
+// Chart.js code for the line chart
+function createLineChart() {
+    var ctx = document.getElementById('myLineChart').getContext('2d');
+    var myLineChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: dataSource.labels,
+            datasets: [{
+                label: 'Monthly Spending Trends',
+                data: dataSource.datasets[0].data,
+                borderColor: '#36a2eb',
+                fill: false
+            }]
+        }
+    });
+}
+
+function getBudget() {
+    axios.get('http://localhost:8080')
+        .then(function (res) {
+            console.log('Response data:', res.data);
+
+            // Check if myBudget exists and has length
+            if (res.data.myBudget && res.data.myBudget.length > 0) {
+                for (var i = 0; i < res.data.myBudget.length; i++) {
+                    dataSource.datasets[0].data[i] = res.data.myBudget[i].budget;
+                    dataSource.labels[i] = res.data.myBudget[i].title;
+                }
+                createChart(); // Create bar chart
+                createPieChart(); // Create pie chart
+                createLineChart(); // Create line chart
+            } else {
+                console.error('No budget data found.');
+            }
+        })
+        .catch(function (error) {
+            console.error('Error fetching budget data:', error);
+        });
+}
+
+    getBudget();
+    
+    // D3.js code for the new bar chart
+    var data = [
+        { category: "Eat out", budget: 30 },
+        { category: "Rent", budget: 350 },
+        { category: "Grocery", budget: 90 },
+        { category: "Wifi", budget: 53 },
+        { category: "Car Gas", budget: 100 },
+        { category: "TV", budget: 20 },
+        { category: "Phone Bill", budget: 35 }
+    ];
+
+    var svgBar = d3.select("#d3-bar-chart")
+        .append("svg")
+        .attr("width", 400)
+        .attr("height", 400);
+
+    var margin = { top: 20, right: 20, bottom: 30, left: 40 },
+        width = +svgBar.attr("width") - margin.left - margin.right,
+        height = +svgBar.attr("height") - margin.top - margin.bottom;
+
+    var x = d3.scaleBand().rangeRound([0, width]).padding(0.1),
+        y = d3.scaleLinear().rangeRound([height, 0]);
+
+    var g = svgBar.append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    x.domain(data.map(function (d) { return d.category; }));
+    y.domain([0, d3.max(data, function (d) { return d.budget; })]);
+
+    g.append("g")
+        .selectAll(".bar")
+        .data(data)
+        .enter().append("rect")
+        .attr("class", "bar")
+        .attr("x", function (d) { return x(d.category); })
+        .attr("y", function (d) { return y(d.budget); })
+        .attr("width", x.bandwidth())
+        .attr("height", function (d) { return height - y(d.budget); });
+
+    g.append("g")
+        .attr("class", "axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x));
+
+    g.append("g")
+        .attr("class", "axis")
+        .call(d3.axisLeft(y).ticks(5));
+
+
+// Function to handle user login
+function loginUser() {
+        const username = document.getElementById('login-username').value;
+        const password = document.getElementById('login-password').value;
+
+        // Display entered username and password
+        showLoginInfo(username, password);
+
+        // Use Axios to send a login request to the server
+        axios.post('http://localhost:3000/login', { username, password })
+            .then(response => {
+                console.log('Login response:', response.data); // Log the response data
+                // Check if the login was successful
+                if (response.data.success) {
+                    console.log('Redirecting...'); // Log the redirection
+                    // Redirect to a new page after successful login
+                    window.location.href = '/dashboard.html'; // Change 'dashboard.html' to the desired page
+
+                    // Assuming you receive a token from the server
+                    const token = response.data.token;
+
+                    // Call the function to handle token expiration
+                    handleTokenExpiration(token);
+                } else {
+                    // Show login status or error message
+                    showLoginStatus('Login failed. Please check your credentials.');
+                }
+            })
+            .catch(error => {
+                console.error('Login error:', error); // Log any errors
+                // Show login status or error message
+                showLoginStatus('Login failed. Please try again.');
+            });
+    }
+
+
+     // Token handling functions
+     let tokenExpirationTimeout;
+
+function handleTokenExpiration(token) {
+    // Show a warning 20 seconds before the token expires
+    tokenExpirationTimeout = setTimeout(() => {
+        alert('Token will expire in 20 seconds. Click "Refresh" to extend the session.');
+    }, 40000); // 40 seconds
+
+    // You can also call the refreshToken function here if needed
+    // refreshToken(token);
+}
+
+function refreshToken(token) {
+    // Call your server to refresh the token
+    // Update the token in your authorization headers
+
+    // Clear existing timeout
+    clearTimeout(tokenExpirationTimeout);
+
+    // Set up a new warning for the refreshed token
+    handleTokenExpiration(token);
+}
+// Function to display entered username and password
+function showLoginInfo(username, password) {
+    var loginInfo = document.getElementById('login-info');
+    if (loginInfo) {
+        loginInfo.innerText = `Entered Username: ${username}, Entered Password: ${password}`;
+        loginInfo.style.display = 'block';
+    }
+}
+
+// Function to show the login status or error message
+function showLoginStatus(message) {
+    var loginStatus = document.getElementById('login-status');
+    if (loginStatus) {
+        loginStatus.innerText = message;
+        loginStatus.style.display = 'block';
+    }
+}
+
+// Function to show the login form
+function showLogin() {
+    // Assuming you have a login form with an ID "login-form"
+    var loginForm = document.getElementById('login-form');
+    if (loginForm) {
+        loginForm.style.display = 'block';
+        // Hide the login status and login info when showing the login form
+        var loginStatus = document.getElementById('login-status');
+        var loginInfo = document.getElementById('login-info');
+        if (loginStatus) {
+            loginStatus.style.display = 'none';
+        }
+        if (loginInfo) {
+            loginInfo.style.display = 'none';
+        }
+    }
+}
+
+</script>
+</body>
+</html>
