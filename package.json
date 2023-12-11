@@ -2,9 +2,9 @@
   "name": "personal-budget-app",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js", // Assuming this is the entry point of your application
+  "main": "index.js",
   "scripts": {
-    "start": "node index.js" // Adjust this line according to your setup
+    "start": "node index.js"
   },
   "author": "",
   "license": "ISC",
