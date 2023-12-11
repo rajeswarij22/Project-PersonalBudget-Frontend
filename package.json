@@ -2,9 +2,9 @@
   "name": "personal-budget-app",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.js", // Assuming this is the entry point of your application
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js" // Adjust this line according to your setup
   },
   "author": "",
   "license": "ISC",
