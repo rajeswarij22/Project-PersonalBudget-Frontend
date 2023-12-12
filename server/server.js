@@ -28,6 +28,13 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Serve Angular app files
+app.use('/angular-app', express.static('path/to/your/angular-app'));
+
+// Route for Angular app
+app.get('/app', (req, res) => {
+  res.sendFile(path.join(__dirname, 'path/to/your/angular-app/index.html'));
+});
 
 // Serve static files
 app.use('/styles', express.static('C:/Users/rajes/Downloads/NBAD1/personal-budget-app/public/styles'));
@@ -118,3 +125,5 @@ app.post('/login', async (req, res) => {
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
+
+
